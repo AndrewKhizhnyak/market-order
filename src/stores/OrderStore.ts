@@ -1,11 +1,11 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { socket } from "../utils/websocket";
 
-interface Order {
-  id: string;
-  tokenAmount: number;
-  dollarAmount: number;
-  status: string;
+export interface Order {
+  id: number;
+  amountTokens: number;
+  amountDollars: number;
+  status: "Processing" | "Completed";
   createdAt: string;
 }
 
@@ -14,22 +14,33 @@ class OrderStore {
 
   constructor() {
     makeAutoObservable(this);
+
+    // Listen for initial order list from the server
+    socket.on("orderList", (initialOrders: Order[]) => {
+      runInAction(() => { 
+        this.orders = initialOrders;
+      });
+    });
+
+    // Listen for new orders
+    socket.on("newOrder", (newOrder: Order) => {
+      this.orders.push(newOrder);
+    });
+
+    // Listen for order status updates
+    socket.on("orderUpdated", (updatedOrder: Order) => {
+      const index = this.orders.findIndex((order) => order.id === updatedOrder.id);
+      if (index !== -1) {
+        this.orders[index] = updatedOrder;
+      }
+    });
   }
 
-  addOrder(order: Order) {
-    this.orders.push(order);
-  }
-
-  updateOrderStatus(id: string, status: string) {
-    const order = this.orders.find((o) => o.id === id);
-    if (order) {
-      order.status = status;
-    }
+  // Emit new order creation event via WebSocket
+  createOrder(amountTokens: number, amountDollars: number) {
+    const newOrder = { amountTokens, amountDollars };
+    socket.emit("createOrder", newOrder);
   }
 }
 
 export const orderStore = new OrderStore();
-
-socket.on("orderStatusUpdate", ({ id, status }: { id: string; status: string }) => {
-  orderStore.updateOrderStatus(id, status);
-});

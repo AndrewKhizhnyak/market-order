@@ -1,29 +1,51 @@
+// src/components/OrderList.tsx
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { orderStore } from "../stores/OrderStore";
 
 export const OrderList: React.FC = observer(() => {
   return (
-    <div>
-      <h4>List of orders</h4>
-      <ul className="list-group">
-        {orderStore.orders.map((order) => (
-          <li key={order.id} className="list-group-item">
-            <div>
-              <strong>Tokens:</strong> {order.tokenAmount.toFixed(4)}
-            </div>
-            <div>
-              <strong>Dollars:</strong> {order.dollarAmount.toFixed(2)}
-            </div>
-            <div>
-              <strong>Status:</strong> {order.status}
-            </div>
-            <div>
-              <strong>Time:</strong> {order.createdAt}
-            </div>
-          </li>
-        ))}
-      </ul>
+    <div className="card">
+      <div className="card-header text-center">
+        <h4>Order List</h4>
+      </div>
+      <div className="card-body">
+        {orderStore.orders.length === 0 ? (
+          <p className="text-center text-muted">No orders available</p>
+        ) : (
+          <ul className="list-group">
+            {orderStore.orders.map((order) => (
+              <li
+                key={order.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                <div>
+                  <div>
+                    <strong>Tokens:</strong> {order.amountTokens.toFixed(4)}
+                  </div>
+                  <div>
+                    <strong>Dollars:</strong> {order.amountDollars.toFixed(2)}
+                  </div>
+                </div>
+                <div>
+                  <span
+                    className={`badge ${
+                      order.status === "Processing"
+                        ? "bg-warning"
+                        : "bg-success"
+                    } me-2`}
+                  >
+                    {order.status}
+                  </span>
+                  <small className="text-muted">
+                    {new Date(order.createdAt).toLocaleString()}
+                  </small>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 });
