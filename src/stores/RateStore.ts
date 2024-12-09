@@ -1,4 +1,3 @@
-// src/stores/RateStore.ts
 import { makeAutoObservable, runInAction } from "mobx";
 import { socket } from "../utils/websocket";
 

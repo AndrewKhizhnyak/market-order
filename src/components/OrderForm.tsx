@@ -27,7 +27,7 @@ export const OrderForm: React.FC = observer(() => {
         <h4>Create Market Order</h4>
       </div>
       <div className="card-body">
-        <div className="mb-3">
+        <div className="mb-1">
           <label className="form-label">Enter Amount:</label>
           <input
             type="number"
@@ -38,6 +38,13 @@ export const OrderForm: React.FC = observer(() => {
               inputMode === "tokens" ? "Amount in tokens" : "Amount in dollars"
             }
           />
+        </div>
+        <div className="mb-3">
+          <small className="text-muted">
+            {inputMode === "tokens"
+              ? `Equivalent to ${(amount * rateStore.rate).toFixed(2)} $`
+              : `Equivalent to ${(amount / rateStore.rate).toFixed(4)} Tokens`}
+          </small>
         </div>
         <div className="btn-group mb-3 w-100">
           <button
