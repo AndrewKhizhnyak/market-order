@@ -1,50 +1,111 @@
-# React + TypeScript + Vite
+# Market Order SPA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## **Описание**
 
-Currently, two official plugins are available:
+Приложение представляет собой одностраничное веб-приложение (SPA) для размещения рыночных ордеров на покупку токенов. Оно реализовано с использованием **React**, **TypeScript**, **MobX**, и **Socket.IO**. Приложение обновляет данные в реальном времени через WebSocket.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## **Функциональность**
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. **Создание ордера**:
 
-- Configure the top-level `parserOptions` property like this:
+   - Ввод суммы в токенах или долларах.
+   - Переключение между вводом в токенах и долларах.
+   - Автоматический пересчет значений на основе текущего курса токена.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+2. **Список ордеров**:
+
+   - Отображение всех созданных ордеров.
+   - Статусы ордеров обновляются в реальном времени.
+   - Информация о времени создания каждого ордера.
+
+3. **Текущий курс токена**:
+   - Отображение курса токена, обновляющегося через WebSocket.
+
+---
+
+## **Технологии**
+
+- **Frontend**: React, TypeScript, MobX, Bootstrap.
+- **WebSocket**: Socket.IO.
+- **Сборка**: Vite.
+
+---
+
+## **Установка и запуск**
+
+### **1. Клонируйте репозиторий**
+
+```bash
+git clone https://github.com/AndrewKhizhnyak/market-order.git
+cd market-order
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### **2. Установите зависимости**
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+### **3. Запустите приложение**
+
+```bash
+npm run dev
+```
+
+Откройте браузер и перейдите по адресу: [http://localhost:5173](http://localhost:5173).
+
+---
+
+## **Структура проекта**
+
+```plaintext
+market-order/
+├── public/           # Статические файлы
+├── src/
+│   ├── components/   # Реакт-компоненты
+│   │   ├── CurrentRate.tsx   # Отображение текущего курса
+│   │   ├── OrderForm.tsx     # Форма создания ордера
+│   │   └── OrderList.tsx     # Список ордеров
+│   ├── stores/       # Состояние (MobX)
+│   │   ├── OrderStore.ts     # Стор для ордеров
+│   │   └── RateStore.ts      # Стор для курса
+│   ├── utils/        # Утилиты
+│   │   └── websocket.ts      # Настройка WebSocket
+│   ├── App.tsx       # Основное приложение
+│   └── main.tsx      # Точка входа
+├── package.json      # Зависимости проекта
+├── tsconfig.json     # Конфигурация TypeScript
+├── vite.config.ts    # Конфигурация Vite
+└── README.md         # Описание проекта
+```
+
+---
+
+## **Использование**
+
+1. Введите сумму в поле ввода (в токенах или долларах).
+2. Переключайтесь между вводом в токенах или долларах с помощью кнопок.
+3. Нажмите "Создать ордер" для добавления нового ордера в список.
+4. Список ордеров и их статусы обновляются в реальном времени через WebSocket.
+5. Текущий курс токена отображается в верхней части страницы.
+
+---
+
+## **Настройка WebSocket**
+
+Приложение ожидает подключения WebSocket-сервера на `http://localhost:3000`.
+
+---
+
+## **Демо**
+
+- **Создание ордера**: Введите данные и нажмите "Создать ордер".
+- **Реальное время**: Курс и статусы обновляются через WebSocket.
+
+---
+
+## **Контакты**
+
+Если у вас есть вопросы или предложения, напишите мне! 😊
