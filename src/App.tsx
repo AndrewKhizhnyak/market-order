@@ -5,10 +5,10 @@ import { OrderList } from "./components/OrderList";
 
 export const App: React.FC = () => {
   return (
-    <>
+    <div className="container mt-4">
       <CurrentRate />
       <OrderForm />
       <OrderList />
-    </>
+    </div>
   );
 };

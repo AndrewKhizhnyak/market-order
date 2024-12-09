@@ -10,11 +10,16 @@ export const OrderList: React.FC = observer(() => {
         {orderStore.orders.map((order) => (
           <li key={order.id} className="list-group-item">
             <div>
-              <strong>Tokens:</strong> {order.tokenAmount.toFixed(4)} |{" "}
+              <strong>Tokens:</strong> {order.tokenAmount.toFixed(4)}
+            </div>
+            <div>
               <strong>Dollars:</strong> {order.dollarAmount.toFixed(2)}
             </div>
             <div>
-              <strong>Status:</strong> {order.status} | <strong>Time:</strong> {order.createdAt}
+              <strong>Status:</strong> {order.status}
+            </div>
+            <div>
+              <strong>Time:</strong> {order.createdAt}
             </div>
           </li>
         ))}
