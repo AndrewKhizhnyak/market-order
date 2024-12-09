@@ -37,9 +37,11 @@ export const OrderList: React.FC = observer(() => {
                   >
                     {order.status}
                   </span>
-                  <small className="text-muted">
-                    {new Date(order.createdAt).toLocaleString()}
-                  </small>
+                  <div>
+                    <small className="text-muted">
+                      {new Date(order.createdAt).toLocaleString()}
+                    </small>
+                  </div>
                 </div>
               </li>
             ))}

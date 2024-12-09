@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import axios from "axios";
 import { socket } from "../utils/websocket";
 
 export interface Order {
@@ -17,29 +18,36 @@ class OrderStore {
 
     // Listen for initial order list from the server
     socket.on("orderList", (initialOrders: Order[]) => {
-      runInAction(() => { 
-        this.orders = initialOrders;
-      });
+      runInAction(() => { this.orders = initialOrders });
     });
 
     // Listen for new orders
     socket.on("newOrder", (newOrder: Order) => {
-      this.orders.push(newOrder);
+      runInAction(() => { this.orders.push(newOrder) });
+      
     });
 
     // Listen for order status updates
     socket.on("orderUpdated", (updatedOrder: Order) => {
       const index = this.orders.findIndex((order) => order.id === updatedOrder.id);
       if (index !== -1) {
-        this.orders[index] = updatedOrder;
+        runInAction(() => { this.orders[index] = updatedOrder; });
+        
       }
     });
   }
 
-  // Emit new order creation event via WebSocket
-  createOrder(amountTokens: number, amountDollars: number) {
-    const newOrder = { amountTokens, amountDollars };
-    socket.emit("createOrder", newOrder);
+  async createOrder(amountTokens: number, amountDollars: number) {
+    try {
+      const response = await axios.post("http://localhost:3000/orders", {
+        amountTokens,
+        amountDollars,
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
   }
 }
 
